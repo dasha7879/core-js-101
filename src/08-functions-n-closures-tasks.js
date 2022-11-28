@@ -23,8 +23,8 @@
  *   getComposition(Math.sin, Math.asin)(x) => Math.sin(Math.asin(x))
  *
  */
-function getComposition(/* f, g */) {
-  throw new Error('Not implemented');
+function getComposition(f, g) {
+  return (x) => f(g(x));
 }
 
 
@@ -44,8 +44,8 @@ function getComposition(/* f, g */) {
  *   power05(16) => 4
  *
  */
-function getPowerFunction(/* exponent */) {
-  throw new Error('Not implemented');
+function getPowerFunction(exponent) {
+  return (x) => x ** exponent;
 }
 
 
@@ -58,12 +58,21 @@ function getPowerFunction(/* exponent */) {
  *
  * @example
  *   getPolynom(2,3,5) => y = 2*x^2 + 3*x + 5
- *   getPolynom(1,-3)  => y = x - 3
+ *   getPolynom(2,-3)  => y = x - 3
  *   getPolynom(8)     => y = 8
  *   getPolynom()      => null
  */
-function getPolynom() {
-  throw new Error('Not implemented');
+function getPolynom(a, b, c) {
+  if (arguments.length === 1) {
+    return () => a;
+  }
+  if (arguments.length === 2) {
+    return (x) => a * x + b;
+  }
+  if (arguments.length === 3) {
+    return (x) => (a * (x ** 2)) + (b * x) + c;
+  }
+  return null;
 }
 
 
@@ -81,8 +90,9 @@ function getPolynom() {
  *   ...
  *   memoizer() => the same random number  (next run, returns the previous cached result)
  */
-function memoize(/* func */) {
-  throw new Error('Not implemented');
+function memoize(func) {
+  const cache = func();
+  return () => cache;
 }
 
 
@@ -95,14 +105,27 @@ function memoize(/* func */) {
  * @return {Function}
  *
  * @example
- * const attempt = 0, retryer = retry(() => {
+ * const attempt = 0
+ * const retryer = retry(() => {
  *      if (++attempt % 2) throw new Error('test');
  *      else return attempt;
  * }, 2);
  * retryer() => 2
  */
-function retry(/* func, attempts */) {
-  throw new Error('Not implemented');
+function retry(func, attempts) {
+  return function () {
+    let result;
+    let i = attempts;
+    while (i > 0) {
+      try {
+        result = func();
+        break;
+      } catch (e) {
+        i -= 1;
+      }
+    }
+    return result;
+  };
 }
 
 
